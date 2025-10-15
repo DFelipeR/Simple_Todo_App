@@ -2,6 +2,17 @@
 
 A basic Todo application built from scratch to learn PHP and MySQL fundamentals.
 
+## 📸 Screenshots
+
+### Main Interface
+![Main Interface](screenshots/main-interface.png)
+
+### Adding New Tasks
+![Adding Task](screenshots/adding-task.png)
+
+### Task Management
+![Task Actions](screenshots/task-actions.png)
+
 ## 🎯 Features
 
 - ✅ Add new tasks
