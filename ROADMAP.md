@@ -5,8 +5,9 @@
 ## 📋 Overview
 
 This roadmap takes the Simple Todo App through a complete evolution, covering:
+
 - Advanced PHP concepts
-- Modern frameworks (Laravel)  
+- Modern frameworks (Laravel)
 - Frontend development (React)
 - DevOps and deployment
 - Production best practices
@@ -16,9 +17,11 @@ This roadmap takes the Simple Todo App through a complete evolution, covering:
 ## 📅 WEEK 1: Advanced Fundamentals
 
 ### 🎯 Day 1-2: User Authentication System
+
 **Goal:** Multi-user support with login/register
 
 #### Database Changes:
+
 ```sql
 -- Create users table
 CREATE TABLE users (
@@ -35,13 +38,15 @@ ALTER TABLE tasks ADD FOREIGN KEY (user_id) REFERENCES users(id);
 ```
 
 #### Features to implement:
+
 - [ ] User registration form
-- [ ] Login/logout functionality  
+- [ ] Login/logout functionality
 - [ ] Password hashing (password_hash())
 - [ ] Session management
 - [ ] User-specific tasks only
 
 #### Learning objectives:
+
 - PHP Sessions
 - Password security
 - SQL Foreign Keys
@@ -50,9 +55,11 @@ ALTER TABLE tasks ADD FOREIGN KEY (user_id) REFERENCES users(id);
 ---
 
 ### 🎯 Day 3-4: Enhanced Task Management
+
 **Goal:** Professional task features
 
 #### New Features:
+
 - [ ] Task categories (Work, Personal, Shopping, etc.)
 - [ ] Due dates and time
 - [ ] Priority levels (High, Medium, Low)
@@ -60,6 +67,7 @@ ALTER TABLE tasks ADD FOREIGN KEY (user_id) REFERENCES users(id);
 - [ ] Task search and filtering
 
 #### Database Changes:
+
 ```sql
 -- Add new columns to tasks
 ALTER TABLE tasks ADD COLUMN category VARCHAR(50) DEFAULT 'General';
@@ -69,6 +77,7 @@ ALTER TABLE tasks ADD COLUMN description TEXT NULL;
 ```
 
 #### Learning objectives:
+
 - Advanced SQL queries
 - Form handling
 - Date/time in PHP
@@ -77,9 +86,11 @@ ALTER TABLE tasks ADD COLUMN description TEXT NULL;
 ---
 
 ### 🎯 Day 5-6: REST API Development
+
 **Goal:** Convert app to API-first architecture
 
 #### API Endpoints to create:
+
 ```
 GET    /api/tasks           - List all user tasks
 POST   /api/tasks           - Create new task
@@ -90,6 +101,7 @@ POST   /api/auth/register   - User registration
 ```
 
 #### Features:
+
 - [ ] JSON responses
 - [ ] Token-based authentication
 - [ ] API documentation
@@ -97,6 +109,7 @@ POST   /api/auth/register   - User registration
 - [ ] Rate limiting
 
 #### Learning objectives:
+
 - RESTful design
 - JWT tokens
 - JSON handling
@@ -105,15 +118,18 @@ POST   /api/auth/register   - User registration
 ---
 
 ### 🎯 Day 7: Testing & Security
+
 **Goal:** Professional code quality
 
 #### Testing:
+
 - [ ] PHPUnit setup
 - [ ] Unit tests for models
 - [ ] Integration tests for API
 - [ ] Test database setup
 
 #### Security:
+
 - [ ] Input validation
 - [ ] SQL injection prevention
 - [ ] XSS protection
@@ -121,6 +137,7 @@ POST   /api/auth/register   - User registration
 - [ ] Rate limiting
 
 #### Learning objectives:
+
 - Test-driven development
 - Security best practices
 - Code coverage
@@ -131,14 +148,17 @@ POST   /api/auth/register   - User registration
 ## 📅 WEEK 2: Modern Frameworks & Frontend
 
 ### 🎯 Day 8-10: Laravel Introduction
+
 **Goal:** Rebuild app with Laravel framework
 
 #### New Laravel Project:
+
 ```bash
 composer create-project laravel/laravel todo-app-laravel
 ```
 
 #### Features to implement:
+
 - [ ] Laravel authentication
 - [ ] Eloquent models
 - [ ] Blade templates
@@ -146,6 +166,7 @@ composer create-project laravel/laravel todo-app-laravel
 - [ ] Seeders and factories
 
 #### Learning objectives:
+
 - MVC architecture
 - Eloquent ORM
 - Blade templating
@@ -154,9 +175,11 @@ composer create-project laravel/laravel todo-app-laravel
 ---
 
 ### 🎯 Day 11-12: Laravel Advanced Features
+
 **Goal:** Professional Laravel development
 
 #### Advanced Features:
+
 - [ ] Model relationships
 - [ ] Form requests validation
 - [ ] File uploads (task attachments)
@@ -164,12 +187,14 @@ composer create-project laravel/laravel todo-app-laravel
 - [ ] Task sharing between users
 
 #### Laravel Tools:
+
 - [ ] Artisan commands
 - [ ] Jobs and queues
 - [ ] Events and listeners
 - [ ] API resources
 
 #### Learning objectives:
+
 - Advanced Eloquent
 - Laravel ecosystem
 - Background jobs
@@ -178,14 +203,17 @@ composer create-project laravel/laravel todo-app-laravel
 ---
 
 ### 🎯 Day 13-14: React Frontend
+
 **Goal:** Modern SPA frontend
 
 #### React Setup:
+
 ```bash
 npx create-react-app todo-frontend
 ```
 
 #### Features:
+
 - [ ] Component-based architecture
 - [ ] State management (useState, useContext)
 - [ ] API integration with Axios
@@ -193,6 +221,7 @@ npx create-react-app todo-frontend
 - [ ] Real-time updates
 
 #### Learning objectives:
+
 - React hooks
 - Component lifecycle
 - API consumption
@@ -203,9 +232,11 @@ npx create-react-app todo-frontend
 ## 📅 WEEK 3: DevOps & Production
 
 ### 🎯 Day 15-16: Containerization
+
 **Goal:** Docker deployment
 
 #### Docker Setup:
+
 - [ ] Dockerfile for PHP application
 - [ ] Docker-compose with MySQL and Nginx
 - [ ] Environment variables
@@ -219,6 +250,7 @@ COPY . /var/www/html
 ```
 
 #### Learning objectives:
+
 - Container concepts
 - Multi-service architecture
 - Environment configuration
@@ -227,9 +259,11 @@ COPY . /var/www/html
 ---
 
 ### 🎯 Day 17-18: CI/CD Pipeline
+
 **Goal:** Automated deployment
 
 #### GitHub Actions:
+
 - [ ] Automated testing
 - [ ] Code quality checks
 - [ ] Security scanning
@@ -251,6 +285,7 @@ jobs:
 ```
 
 #### Learning objectives:
+
 - CI/CD concepts
 - Automated testing
 - Deployment strategies
@@ -259,15 +294,18 @@ jobs:
 ---
 
 ### 🎯 Day 19-21: Production Deployment
+
 **Goal:** Live application
 
 #### Deployment Options:
+
 - [ ] DigitalOcean Droplet
 - [ ] Heroku deployment
 - [ ] AWS EC2 instance
 - [ ] Vercel (for React frontend)
 
 #### Production Features:
+
 - [ ] SSL certificates
 - [ ] Custom domain
 - [ ] Performance optimization
@@ -275,6 +313,7 @@ jobs:
 - [ ] Backup strategies
 
 #### Learning objectives:
+
 - Server management
 - Security in production
 - Performance optimization
@@ -285,17 +324,20 @@ jobs:
 ## 🎯 Milestones & Deliverables
 
 ### Week 1 Milestone:
+
 - ✅ Multi-user Todo App with authentication
 - ✅ Advanced task management features
 - ✅ REST API with documentation
 - ✅ Comprehensive testing
 
 ### Week 2 Milestone:
+
 - ✅ Laravel version of the application
 - ✅ React frontend consuming the API
 - ✅ Modern development workflow
 
 ### Week 3 Milestone:
+
 - ✅ Containerized application
 - ✅ CI/CD pipeline
 - ✅ Live production deployment
@@ -305,18 +347,21 @@ jobs:
 ## 📚 Resources & Tools
 
 ### Development Tools:
+
 - **IDE:** VS Code with PHP/Laravel extensions
 - **Database:** MySQL Workbench, phpMyAdmin
 - **API Testing:** Postman, Insomnia
 - **Version Control:** Git, GitHub
 
 ### Learning Resources:
+
 - **PHP:** Official documentation, Laracasts
 - **Laravel:** Official docs, Laracasts
 - **React:** Official tutorial, React docs
 - **Docker:** Official tutorials
 
 ### Deployment Platforms:
+
 - **Backend:** DigitalOcean, Heroku, AWS
 - **Frontend:** Vercel, Netlify
 - **Database:** PlanetScale, AWS RDS
@@ -328,13 +373,14 @@ jobs:
 By day 21, you'll have:
 
 1. **Original PHP App** - Vanilla PHP with advanced features
-2. **Laravel App** - Modern framework implementation  
+2. **Laravel App** - Modern framework implementation
 3. **React Frontend** - SPA consuming your API
 4. **Docker Setup** - Containerized deployment
 5. **CI/CD Pipeline** - Professional development workflow
 6. **Live Deployment** - Production-ready application
 
 ### Portfolio Projects:
+
 - `simple-todo-app` (Original)
 - `todo-app-laravel` (Framework version)
 - `todo-frontend-react` (SPA frontend)
@@ -345,6 +391,7 @@ By day 21, you'll have:
 ## 📝 Daily Checklist Template
 
 ### Day X: [Feature Name]
+
 - [ ] Plan implementation
 - [ ] Code the feature
 - [ ] Write tests
@@ -360,4 +407,4 @@ By day 21, you'll have:
 
 ---
 
-*"The best way to learn is by building. Let's build something amazing!"*
+_"The best way to learn is by building. Let's build something amazing!"_

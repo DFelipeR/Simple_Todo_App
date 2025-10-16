@@ -176,6 +176,12 @@ try {
             </div>
         <?php endif; ?>
         
+        <!-- User Navigation -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="login.php" style="color: #667eea; text-decoration: none; margin: 0 10px;">🔐 Login</a> |
+            <a href="register.php" style="color: #667eea; text-decoration: none; margin: 0 10px;">📝 Register</a>
+        </div>
+        
         <!-- Add Task Form -->
         <form method="POST" action="">
             <input type="text" name="new_task" placeholder="Enter your task here..." required>
