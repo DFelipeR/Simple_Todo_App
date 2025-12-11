@@ -2,6 +2,95 @@
 
 A basic Todo application built from scratch to learn PHP and MySQL fundamentals.
 
+## Setup
+
+1. **Clone the repository:**
+
+## Notificaciones (Worker + RabbitMQ)
+
+Este proyecto incluye un Worker de notificaciones en Node.js que consume eventos de tareas desde RabbitMQ y simula el envío de un email de felicitación.
+
+### Archivos clave
+
+- `notifications-worker.js`: Worker que consume la cola `TASK_EVENTS_QUEUE`.
+- `send-test-message.js`: Productor simple para enviar un mensaje de prueba.
+- `event-producer-server.js`: Servidor HTTP que publica eventos en RabbitMQ.
+
+### Requisitos
+
+- Node.js 14+
+- RabbitMQ corriendo localmente o accesible vía URL
+
+### Instalación
+
+```powershell
+cd c:\xampp\htdocs\simple-todo-app
+npm init -y
+npm install amqplib
+```
+
+Para el servidor HTTP productor (no requiere paquetes adicionales, usa `http` nativo):
+
+```powershell
+# Sin pasos extra
+```
+
+### Ejecutar el Worker
+
+```powershell
+$env:RABBITMQ_URL="amqp://localhost"; $env:TASK_EVENTS_QUEUE="TASK_EVENTS_QUEUE"; node .\notifications-worker.js
+```
+
+### Enviar un mensaje de prueba
+
+```powershell
+$env:RABBITMQ_URL="amqp://localhost"; $env:TASK_EVENTS_QUEUE="TASK_EVENTS_QUEUE"; node .\send-test-message.js
+```
+
+### Productor con flags (CLI)
+
+- Enviar 5 mensajes con título y autor personalizados:
+
+```powershell
+$env:RABBITMQ_URL="amqp://localhost"; $env:TASK_EVENTS_QUEUE="TASK_EVENTS_QUEUE"; node .\send-test-message.js --title="Refactor de API" --by="Ana" --count=5
+```
+
+- Fijar un `taskId` concreto:
+
+```powershell
+$env:RABBITMQ_URL="amqp://localhost"; $env:TASK_EVENTS_QUEUE="TASK_EVENTS_QUEUE"; node .\send-test-message.js --id=9999 --title="Task fija" --by="Bot"
+```
+
+### Script de servicio para RabbitMQ (Windows)
+
+Ejecuta este script para habilitar el panel, instalar e iniciar el servicio y ver el estado:
+
+```powershell
+PowerShell -ExecutionPolicy Bypass -File .\scripts\setup-rabbitmq.ps1
+```
+
+### Servidor HTTP Productor
+
+Arranca el servidor para recibir eventos vía HTTP y publicarlos en RabbitMQ:
+
+```powershell
+$env:RABBITMQ_URL="amqp://localhost"; $env:TASK_EVENTS_QUEUE="TASK_EVENTS_QUEUE"; $env:PORT=3001; node .\event-producer-server.js
+```
+
+Enviar un evento desde PowerShell:
+
+```powershell
+Invoke-RestMethod -Method Post -Uri http://localhost:3001/events/task-completed -ContentType application/json -Body '{"taskId":101,"title":"Generar informe","completedBy":"Carlos"}'
+```
+
+El Worker debe imprimir el log de felicitación y hacer ACK.
+
+Si todo está correcto, el Worker mostrará en consola un log simulando el envío de un email y marcará el mensaje como ACK.
+
+# Simple Todo App
+
+A basic Todo application built from scratch to learn PHP and MySQL fundamentals.
+
 ## 📸 Screenshots
 
 ### Main Interface
