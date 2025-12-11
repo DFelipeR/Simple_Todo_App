@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         
         // Validate input
         if (empty($username) || empty($password)) {
-            $message = "❌ Both username and password are required!";
+            $message = "Both username and password are required!";
             $messageType = 'error';
         } else {
             // Find user in database
@@ -27,23 +27,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             
             if ($user && password_verify($password, $user['password_hash'])) {
                 // LOGIN SUCCESS! 
-                $message = "✅ Welcome back, " . $user['username'] . "!";
-                $messageType = 'success';
-                
-                // TODO: Aquí crearemos las sesiones mañana
-                // session_start();
-                // $_SESSION['user_id'] = $user['id'];
-                
+                session_start();
+                $_SESSION['user_id'] = $user['id'];
+                header('Location: index.php');
+                exit();
             } else {
                 // LOGIN FAILED
-                $message = "❌ Invalid username or password!";
+                $message = "Invalid username or password!";
                 $messageType = 'error';
             }
         }
         
     } catch(Exception $e) {
-        $message = "❌ Error: " . $e->getMessage();
-        $messageType = 'error';
+    $message = "Error: " . $e->getMessage();
+    $messageType = 'error';
     }
 }
 ?>
@@ -130,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 </head>
 <body>
     <div class="container">
-        <h1>🔐 Login</h1>
+    <h1>Login</h1>
         
         <!-- Show messages -->
         <?php if (!empty($message)): ?>
@@ -150,11 +147,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                 <input type="password" id="password" name="password" required>
             </div>
             
-            <button type="submit" name="login">🚀 Login</button>
+            <button type="submit" name="login">Login</button>
         </form>
         
         <div class="links">
             <a href="register.php">Create Account</a> | 
+            <a href="forgot_password.php">Forgot Password?</a> | 
             <a href="index.php">← Back to App</a>
         </div>
     </div>

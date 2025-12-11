@@ -1,8 +1,14 @@
 <?php
-// Include database configuration
+session_start();
 require_once 'config.php';
 
-// Initialize variables for feedback messages
+// Redirect to login if not authenticated
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
 $message = '';
 $messageType = '';
 
@@ -10,36 +16,47 @@ $messageType = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $connection = getDBConnection();
-        
+
+
         // Handle adding new task
         if (isset($_POST['add_task']) && !empty($_POST['new_task'])) {
             $taskText = trim($_POST['new_task']);
-            $stmt = $connection->prepare("INSERT INTO tasks (task_text) VALUES (?)");
-            $stmt->execute([$taskText]);
-            $message = "✅ Task added successfully!";
+            $stmt = $connection->prepare("INSERT INTO tasks (task_text, user_id) VALUES (?, ?)");
+            $stmt->execute([$taskText, $user_id]);
+            $message = "Task added successfully!";
             $messageType = 'success';
         }
-        
-        // Handle toggle task completion
+
+        // Handle edit task
+        if (isset($_POST['edit_task']) && isset($_POST['task_id']) && !empty($_POST['edited_task_text'])) {
+            $taskId = $_POST['task_id'];
+            $editedText = trim($_POST['edited_task_text']);
+            $stmt = $connection->prepare("UPDATE tasks SET task_text = ? WHERE id = ? AND user_id = ?");
+            $stmt->execute([$editedText, $taskId, $user_id]);
+            $message = "Task updated successfully!";
+            $messageType = 'success';
+        }
+
+        // Handle toggle task completion (only for user's own tasks)
         if (isset($_POST['toggle_task']) && isset($_POST['task_id'])) {
             $taskId = $_POST['task_id'];
-            $stmt = $connection->prepare("UPDATE tasks SET completed = NOT completed WHERE id = ?");
-            $stmt->execute([$taskId]);
-            $message = "✅ Task status updated!";
+            $stmt = $connection->prepare("UPDATE tasks SET completed = NOT completed WHERE id = ? AND user_id = ?");
+            $stmt->execute([$taskId, $user_id]);
+            $message = "Task status updated!";
             $messageType = 'success';
         }
-        
-        // Handle delete task
+
+        // Handle delete task (only for user's own tasks)
         if (isset($_POST['delete_task']) && isset($_POST['task_id'])) {
             $taskId = $_POST['task_id'];
-            $stmt = $connection->prepare("DELETE FROM tasks WHERE id = ?");
-            $stmt->execute([$taskId]);
-            $message = "✅ Task deleted successfully!";
+            $stmt = $connection->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ?");
+            $stmt->execute([$taskId, $user_id]);
+            $message = "Task deleted successfully!";
             $messageType = 'success';
         }
-        
+
     } catch(Exception $e) {
-        $message = "❌ Error: " . $e->getMessage();
+        $message = "Error: " . $e->getMessage();
         $messageType = 'error';
     }
 }
@@ -49,7 +66,7 @@ try {
     $connection = getDBConnection();
     // Connection successful - ready to work with database
 } catch(Exception $e) {
-    $message = "❌ Database connection failed: " . $e->getMessage();
+    $message = "Database connection failed: " . $e->getMessage();
     $messageType = 'error';
 }
 ?>
@@ -166,7 +183,7 @@ try {
 </head>
 <body>
     <div class="container">
-        <h1>📝 Simple Todo App</h1>
+    <h1>Simple Todo App</h1>
         <p class="subtitle">Built from scratch to learn PHP & MySQL fundamentals</p>
         
         <!-- Show messages -->
@@ -178,57 +195,70 @@ try {
         
         <!-- User Navigation -->
         <div style="text-align: center; margin-bottom: 20px;">
-            <a href="login.php" style="color: #667eea; text-decoration: none; margin: 0 10px;">🔐 Login</a> |
-            <a href="register.php" style="color: #667eea; text-decoration: none; margin: 0 10px;">📝 Register</a>
+            <a href="logout.php" style="color: #dc3545; text-decoration: none; margin: 0 10px;">Logout</a>
         </div>
         
         <!-- Add Task Form -->
         <form method="POST" action="">
             <input type="text" name="new_task" placeholder="Enter your task here..." required>
-            <button type="submit" name="add_task">➕ Add Task</button>
+            <button type="submit" name="add_task">Add Task</button>
         </form>
 
         <!-- Tasks List -->
         <div id="tasks-list">
             <?php
-            // Fetch tasks from database
+            // Fetch tasks for the logged-in user
             try {
                 $connection = getDBConnection();
-                $stmt = $connection->query("SELECT * FROM tasks ORDER BY created_at DESC");
+                $stmt = $connection->prepare("SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC");
+                $stmt->execute([$user_id]);
                 $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                
+
                 if (count($tasks) > 0) {
+                    // Detect if editing a task
+                    $editingTaskId = isset($_POST['start_edit']) ? intval($_POST['task_id']) : null;
                     foreach ($tasks as $task) {
                         $completedClass = $task['completed'] ? 'completed' : '';
-                        $statusIcon = $task['completed'] ? '✅' : '⏳';
                         echo '<div class="task ' . $completedClass . '">';
-                        echo '<span>' . $statusIcon . ' ' . htmlspecialchars($task['task_text']) . '</span>';
-                        echo '<div class="task-actions">';
-                        
-                        // Complete/Uncomplete button
-                        $completeText = $task['completed'] ? 'Mark as Pending' : 'Mark as Complete';
-                        $completeClass = $task['completed'] ? 'btn-complete' : 'btn-complete';
-                        echo '<form method="POST" style="display: inline;">';
-                        echo '<input type="hidden" name="task_id" value="' . $task['id'] . '">';
-                        echo '<button type="submit" name="toggle_task" class="btn-small ' . $completeClass . '">' . $completeText . '</button>';
-                        echo '</form>';
-                        
-                        // Delete button
-                        echo '<form method="POST" style="display: inline;">';
-                        echo '<input type="hidden" name="task_id" value="' . $task['id'] . '">';
-                        echo '<button type="submit" name="delete_task" class="btn-small btn-delete" onclick="return confirm(\'Are you sure you want to delete this task?\')">🗑️ Delete</button>';
-                        echo '</form>';
-                        
-                        echo '</div>';
+                        // Si está en modo edición, mostrar formulario
+                        if (isset($editingTaskId) && $editingTaskId === intval($task['id'])) {
+                            echo '<form method="POST" style="display:inline; width:100%;">';
+                            echo '<input type="hidden" name="task_id" value="' . $task['id'] . '">';
+                            echo '<input type="text" name="edited_task_text" value="' . htmlspecialchars($task['task_text']) . '" style="width:60%; padding:5px;">';
+                            echo '<button type="submit" name="edit_task" class="btn-small btn-complete">Save</button>';
+                            echo '<button type="submit" name="cancel_edit" class="btn-small">Cancel</button>';
+                            echo '</form>';
+                        } else {
+                            echo '<span>' . htmlspecialchars($task['task_text']) . '</span>';
+                            echo '<div class="task-actions">';
+                            // Edit button
+                            echo '<form method="POST" style="display:inline;">';
+                            echo '<input type="hidden" name="task_id" value="' . $task['id'] . '">';
+                            echo '<button type="submit" name="start_edit" class="btn-small">Edit</button>';
+                            echo '</form>';
+                            // Complete/Uncomplete button
+                            $completeText = $task['completed'] ? 'Mark as Pending' : 'Mark as Complete';
+                            $completeClass = $task['completed'] ? 'btn-complete' : 'btn-complete';
+                            echo '<form method="POST" style="display: inline;">';
+                            echo '<input type="hidden" name="task_id" value="' . $task['id'] . '">';
+                            echo '<button type="submit" name="toggle_task" class="btn-small ' . $completeClass . '">' . $completeText . '</button>';
+                            echo '</form>';
+                            // Delete button
+                            echo '<form method="POST" style="display: inline;">';
+                            echo '<input type="hidden" name="task_id" value="' . $task['id'] . '">';
+                            echo '<button type="submit" name="delete_task" class="btn-small btn-delete" onclick="return confirm(\'Are you sure you want to delete this task?\')">Delete</button>';
+                            echo '</form>';
+                            echo '</div>';
+                        }
                         echo '</div>';
                     }
                 } else {
                     echo '<div class="task">';
-                    echo '<span>📋 No tasks yet. Add your first task above!</span>';
+                    echo '<span>No tasks yet. Add your first task above!</span>';
                     echo '</div>';
                 }
             } catch(Exception $e) {
-                echo '<div class="message error">❌ Error loading tasks: ' . $e->getMessage() . '</div>';
+                echo '<div class="message error">Error loading tasks: ' . $e->getMessage() . '</div>';
             }
             ?>
         </div>

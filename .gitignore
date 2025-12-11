@@ -23,4 +23,7 @@ Thumbs.db
 *~
 
 # Local configuration (if needed)
-# config.local.php
+# config.local.phpnode_modules/
+vendor/
+.env
+node_modules/
