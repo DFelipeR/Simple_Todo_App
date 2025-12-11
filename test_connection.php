@@ -13,9 +13,9 @@ try {
     $connection = getDBConnection();
     $stmt = $connection->query("SELECT COUNT(*) as total FROM tasks");
     $result = $stmt->fetch();
-    echo "📋 Total de tareas en la base de datos: " . $result['total'] . "<br>";
-    echo "🎉 ¡La conexión y consulta funcionan perfectamente!";
+    echo "Total de tareas en la base de datos: " . $result['total'] . "<br>";
+    echo "¡La conexión y consulta funcionan perfectamente!";
 } catch(Exception $e) {
-    echo "❌ Error en la consulta: " . $e->getMessage();
+    echo "Error en la consulta: " . $e->getMessage();
 }
 ?>

@@ -22,7 +22,7 @@ function getDBConnection() {
         
         return $connection;
     } catch(PDOException $e) {
-        die("❌ Connection failed: " . $e->getMessage());
+    die("Connection failed: " . $e->getMessage());
     }
 }
 
@@ -30,11 +30,11 @@ function getDBConnection() {
 function testConnection() {
     try {
         $connection = getDBConnection();
-        echo "✅ Database connection successful!<br>";
-        echo "📊 Connected to database: " . DB_DATABASE . "<br>";
+    echo "Database connection successful!<br>";
+    echo "Connected to database: " . DB_DATABASE . "<br>";
         return true;
     } catch(Exception $e) {
-        echo "❌ Database connection failed: " . $e->getMessage() . "<br>";
+    echo "Database connection failed: " . $e->getMessage() . "<br>";
         return false;
     }
 }

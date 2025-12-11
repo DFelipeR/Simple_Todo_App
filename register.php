@@ -18,10 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         
         // Validate input
         if (empty($username) || empty($email) || empty($password)) {
-            $message = "❌ All fields are required!";
+            $message = "All fields are required!";
             $messageType = 'error';
         } elseif (strlen($password) < 6) {
-            $message = "❌ Password must be at least 6 characters!";
+            $message = "Password must be at least 6 characters!";
             $messageType = 'error';
         } else {
             // Check if username or email already exists
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
             $stmt->execute([$username, $email]);
             
             if ($stmt->rowCount() > 0) {
-                $message = "❌ Username or email already exists!";
+                $message = "Username or email already exists!";
                 $messageType = 'error';
             } else {
                 // Hash the password (SECURITY!)
@@ -39,16 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
                 $stmt = $connection->prepare("INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)");
                 $stmt->execute([$username, $email, $passwordHash]);
                 
-                $message = "✅ Account created successfully! You can now login.";
-                $messageType = 'success';
-                
-                // Clear form data
-                $username = $email = '';
+                // Registro exitoso: redirigir a login.php
+                header('Location: login.php?registered=1');
+                exit();
             }
         }
         
     } catch(Exception $e) {
-        $message = "❌ Error: " . $e->getMessage();
+    $message = "Error: " . $e->getMessage();
         $messageType = 'error';
     }
 }
@@ -135,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
 </head>
 <body>
     <div class="container">
-        <h1>📝 Create Account</h1>
+    <h1>Create Account</h1>
         
         <!-- Show messages -->
         <?php if (!empty($message)): ?>

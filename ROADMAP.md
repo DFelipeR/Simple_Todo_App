@@ -1,8 +1,8 @@
-# 🚀 Simple Todo App Evolution - 21-Day Roadmap
+# Simple Todo App Evolution - 21-Day Roadmap
 
 > From basic PHP/MySQL to full-stack production-ready application
 
-## 📋 Overview
+## Overview
 
 This roadmap takes the Simple Todo App through a complete evolution, covering:
 
@@ -14,9 +14,9 @@ This roadmap takes the Simple Todo App through a complete evolution, covering:
 
 ---
 
-## 📅 WEEK 1: Advanced Fundamentals
+## WEEK 1: Advanced Fundamentals
 
-### 🎯 Day 1-2: User Authentication System
+### Day 1-2: User Authentication System
 
 **Goal:** Multi-user support with login/register
 
@@ -54,7 +54,7 @@ ALTER TABLE tasks ADD FOREIGN KEY (user_id) REFERENCES users(id);
 
 ---
 
-### 🎯 Day 3-4: Enhanced Task Management
+### Day 3-4: Enhanced Task Management
 
 **Goal:** Professional task features
 
@@ -85,7 +85,7 @@ ALTER TABLE tasks ADD COLUMN description TEXT NULL;
 
 ---
 
-### 🎯 Day 5-6: REST API Development
+### Day 5-6: REST API Development
 
 **Goal:** Convert app to API-first architecture
 
@@ -117,7 +117,7 @@ POST   /api/auth/register   - User registration
 
 ---
 
-### 🎯 Day 7: Testing & Security
+### Day 7: Testing & Security
 
 **Goal:** Professional code quality
 
@@ -145,9 +145,9 @@ POST   /api/auth/register   - User registration
 
 ---
 
-## 📅 WEEK 2: Modern Frameworks & Frontend
+## WEEK 2: Modern Frameworks & Frontend
 
-### 🎯 Day 8-10: Laravel Introduction
+### Day 8-10: Laravel Introduction
 
 **Goal:** Rebuild app with Laravel framework
 
@@ -174,7 +174,7 @@ composer create-project laravel/laravel todo-app-laravel
 
 ---
 
-### 🎯 Day 11-12: Laravel Advanced Features
+### Day 11-12: Laravel Advanced Features
 
 **Goal:** Professional Laravel development
 
@@ -202,7 +202,7 @@ composer create-project laravel/laravel todo-app-laravel
 
 ---
 
-### 🎯 Day 13-14: React Frontend
+### Day 13-14: React Frontend
 
 **Goal:** Modern SPA frontend
 
