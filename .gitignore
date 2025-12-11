@@ -26,3 +26,4 @@ Thumbs.db
 # config.local.phpnode_modules/
 vendor/
 .env
+node_modules/
